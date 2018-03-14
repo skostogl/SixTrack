@@ -995,15 +995,15 @@ if(NAFF)
 	if (STATIC)
 		SET(FFTW_USE_STATIC_LIBS 1)
 	endif()
-	find_package(FFTW REQUIRED)
-	include_directories( ${FFTW_INCLUDES} )
-	message(STATUS "Include dirs of FFTW: " ${FFTW_INCLUDES} )
-	message(STATUS "Libs of of FFTW:      " ${FFTW_LIBRARIES} )
+	#find_package(FFTW REQUIRED)
+	#include_directories( ${FFTW_INCLUDES} )
+	#message(STATUS "Include dirs of FFTW: " ${FFTW_INCLUDES} )
+	#message(STATUS "Libs of of FFTW:      " ${FFTW_LIBRARIES} )
 	
 	
 	file(GLOB NAFF_SOURCES ${CMAKE_SOURCE_DIR}/SixTrack/naff/*.cpp ${CMAKE_SOURCE_DIR}/SixTrack/naff/*.cc)
 	add_library(naff STATIC ${NAFF_SOURCES})
-	target_link_libraries(naff ${FFTW_LIBRARIES})
+	#target_link_libraries(naff ${FFTW_LIBRARIES})
 	
 	#Enable c++11
 	set_property(TARGET naff PROPERTY CXX_STANDARD 11)

@@ -182,11 +182,12 @@ contains
     integer :: dump_last_turn                                    ! auxiliary variable for loop over turns
 +if naff
     interface
-       REAL(C_DOUBLE) function tunenaff (x,xp,maxn,plane_idx,norm_flag) BIND(C)
+       REAL(C_DOUBLE) function tunenaff (x,xp,maxn,plane_idx,norm_flag,fft_naff) BIND(C)
          use, intrinsic :: ISO_C_BINDING
          IMPLICIT NONE
          REAL(C_DOUBLE), INTENT(in), DIMENSION(1) :: x,xp
          INTEGER(C_INT), INTENT(in), VALUE :: maxn, plane_idx, norm_flag
+         REAL(C_DOUBLE), INTENT(in), VALUE :: fft_naff
        end function tunenaff
     end interface
     
@@ -198,7 +199,7 @@ contains
 +ei
     ! dummy variables for readin + normalisation + loops
     integer :: id,kt,counter,thisturn
-    real(kind=fPrec) :: pos
+    real(kind=fPrec) :: pos, fft_naff
     real(kind=fPrec), dimension(6) :: xyzvdummy,xyzvdummy2,nxyzvdummy !phase space variables x,x',y,y',sig,delta
     real(kind=fPrec), dimension(3) :: q123 !tune q1,q2,q3
     real(kind=fPrec), dimension(3) :: eps123_0,eps123_min,eps123_max,eps123_avg !initial,minimum,maximum,average emittance
@@ -760,7 +761,8 @@ contains
                          naff_xyzv2 = nxyzv(l,1:nturns(l),  2*m)
                       endif
                       
-                      q123(m) = tunenaff(naff_xyzv1, naff_xyzv2, nturns(l), m, fma_norm_flag(i) )
+                      fft_naff = tunefft( naff_xyzv1, naff_xyzv2, nturns(l) )
+                      q123(m) = tunenaff(naff_xyzv1, naff_xyzv2, nturns(l), m, fma_norm_flag(i),fft_naff )
                       
                       flush(lout)
                       ! stop
